@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 
 public class koneksi {
@@ -77,6 +79,62 @@ public class koneksi {
         } else {
             System.out.println("Koneksi ke database belum diinisialisasi.");
         }
+    }
+    
+    public void GetNIK(String nik) {
+        try{
+            String sql = "select * from belajar where nik=?";
+            PreparedStatement perintah = koneksiDB.prepareStatement(sql);
+            
+            perintah.setString(1, nik);
+            
+            ResultSet data = perintah.executeQuery();
+            
+            while (data.next()){
+                System.out.println("nik : " + data.getString("nik"));
+                System.out.println("nama : " + data.getString("nama"));
+                System.out.println("telp : " + data.getString("telp"));
+            }
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void Getrecord() {
+        try {
+            String sql = "select * from belajar order by nik asc";
+            Statement perintah = koneksiDB.createStatement();
+            
+            ResultSet data = perintah.executeQuery(sql);
+            
+            while(data.next()) {
+                System.out.println(
+                data.getString("nik") + " | " +
+                data.getString("nama") + " | " +
+                data.getString("telp")
+                );
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public int JumlahRecord(){
+        int jumlah = 0;
+        try {
+            String sql = "select * from belajar order by nik asc";
+            Statement perintah = koneksiDB.createStatement();
+            
+            ResultSet data = perintah.executeQuery(sql);
+            
+            while(data.next()) {
+                jumlah = jumlah + 1;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return jumlah;
     }
 }
  
