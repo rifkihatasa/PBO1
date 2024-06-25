@@ -3,7 +3,9 @@ package crud;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class garansi {
     private String database_name = "muhammad_rifki_hatasa_2210010245";
@@ -74,4 +76,59 @@ public class garansi {
             System.out.println("Koneksi ke database belum diinisialisasi.");
         }
     }
+    
+        public void GetGaransi(String tanggal_garansi) {
+        try{
+            String sql ="select * from garansi where tanggal_garansi=?";
+            PreparedStatement perintah = koneksiDB.prepareStatement(sql);
+            
+            perintah.setString(1, tanggal_garansi);
+            ResultSet data = perintah.executeQuery();
+            
+            while (data.next()){
+                System.out.println("tanggal_garansi : " + data.getString("tanggal_garansi"));
+                System.out.println("pesanan_id : " + data.getString("pesanan_id"));
+                System.out.println("keterangan : " + data.getString("keterangan"));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+        
+    public void Getrecord() {
+        try {
+            String sql = "select * from garansi order by tanggal_garansi asc";
+            Statement perintah = koneksiDB.createStatement();
+
+            ResultSet data = perintah.executeQuery(sql);
+
+                while(data.next()) {
+                    System.out.println(
+                    data.getString("tanggal_garansi") + " | " +
+                    data.getString("pesanan_id") + " | " +
+                    data.getString("keterangan")
+                    );
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+    }
+    
+    public int JumlahRecord() {
+        int jumlah = 0;
+        try {
+            String sql = "select * from garansi order by tanggal_garansi asc";
+            Statement perintah = koneksiDB.createStatement();
+            
+            ResultSet data = perintah.executeQuery(sql);
+            
+            while(data.next()) {
+                jumlah = jumlah + 1;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return jumlah;
+    }
+
 }

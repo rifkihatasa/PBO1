@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class pesanan {
@@ -79,4 +80,63 @@ public class pesanan {
             System.out.println("Koneksi ke database belum diinisialisasi.");
         }
     }
-}
+    
+       public void GetPesanan(String nomor_pesanan) {
+        try{
+            String sql ="select * from pesanan where nomor_pesanan=?";
+            PreparedStatement perintah = koneksiDB.prepareStatement(sql);
+            
+            perintah.setString(1, nomor_pesanan);
+            ResultSet data = perintah.executeQuery();
+            
+            while (data.next()){
+                System.out.println("nomor : " + data.getString("nomor_pesanan"));
+                System.out.println("tanggal : " + data.getString("tanggal_pesanan"));
+                System.out.println("jumlah : " + data.getString("jumlah_pesanan"));
+                System.out.println("barang : " + data.getString("barang_id"));
+                System.out.println("customer : " + data.getString("customer_id"));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+        
+    public void Getrecord() {
+        try {
+            String sql = "select * from pesanan order by nomor_pesanan asc";
+            Statement perintah = koneksiDB.createStatement();
+
+            ResultSet data = perintah.executeQuery(sql);
+
+                while(data.next()) {
+                    System.out.println(
+                    data.getString("nomor_pesanan") + " | " +
+                    data.getString("tanggal_pesanan") + " | " +
+                    data.getString("jumlah_pesanan") + " | " +
+                    data.getString("barang_id") + " | " +
+                    data.getString("customer_id")
+                    );
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+    }
+    
+    public int JumlahRecord() {
+        int jumlah = 0;
+        try {
+            String sql = "select * from pesanan order by nomor_pesanan asc";
+            Statement perintah = koneksiDB.createStatement();
+            
+            ResultSet data = perintah.executeQuery(sql);
+            
+            while(data.next()) {
+                jumlah = jumlah + 1;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return jumlah;
+    }
+
+    }

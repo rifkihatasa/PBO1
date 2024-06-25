@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class barang {
     private String database_name = "muhammad_rifki_hatasa_2210010245";
@@ -76,5 +78,59 @@ public void Simpan_Barang(String nama_harga, String harga, String stok) {
         }
     }
 
+    public void GetBarang(String nama_barang) {
+        try{
+            String sql ="select * from barang where nama_barang=?";
+            PreparedStatement perintah = koneksiDB.prepareStatement(sql);
+            
+            perintah.setString(1, nama_barang);
+            ResultSet data = perintah.executeQuery();
+            
+            while (data.next()){
+                System.out.println("nama_barang : " + data.getString("nama_barang"));
+                System.out.println("harga : " + data.getString("harga"));
+                System.out.println("stok : " + data.getString("stok"));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+        
+    public void Getrecord() {
+        try {
+            String sql = "select * from barang order by harga asc";
+            Statement perintah = koneksiDB.createStatement();
 
-}
+            ResultSet data = perintah.executeQuery(sql);
+
+                while(data.next()) {
+                    System.out.println(
+                    data.getString("nama_barang") + " | " +
+                    data.getString("harga") + " | " +
+                    data.getString("stok")
+                    );
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+    }
+    
+    public int JumlahRecord() {
+        int jumlah = 0;
+        try {
+            String sql = "select * from barang order by nama_barang asc";
+            Statement perintah = koneksiDB.createStatement();
+            
+            ResultSet data = perintah.executeQuery(sql);
+            
+            while(data.next()) {
+                jumlah = jumlah + 1;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return jumlah;
+    }
+
+    }
+
